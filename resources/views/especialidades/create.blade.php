@@ -1,18 +1,9 @@
-@extends('especialidades.layout')
-
-@section('content')
-
-<div class="card mt-5">
-  <h2 class="card-header">Agregar Nueva Especialidad</h2>
-  <div class="card-body">
-
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a class="btn btn-primary btn-sm" href="{{ route('especialidades.index') }}">
-            <i class="fa fa-arrow-left"></i> Volver
-        </a>
-    </div>
-
-    <form action="{{ route('especialidades.store') }}" method="POST">
+<div class="modal-header">
+  <h5 class="modal-title">Agregar nueva especialidad</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+  <form action="{{ route('especialidades.store') }}" method="POST">
         @csrf
 
         <div class="mb-3">
@@ -32,7 +23,4 @@
             <i class="fa-solid fa-floppy-disk"></i> Agregar
         </button>
     </form>
-
-  </div>
 </div>
-@endsection

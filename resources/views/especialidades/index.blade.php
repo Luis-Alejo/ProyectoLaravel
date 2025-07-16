@@ -3,11 +3,6 @@
 @section('content')
 
 <div class="card mt-5">
-    <h2 class="card-header">Clínica <em>"Los Andes"</em></h2>
-    <form action="{{ route('logout') }}" method="POST">
-        @csrf
-        <button type="submit">Cerrar sesión</button>
-    </form>
 
     <div class="card-body">
         @session('success')
@@ -16,9 +11,13 @@
 
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             @can('crear especialidades')
-                <a class="btn btn-success btn-sm" href="{{ route('especialidades.create') }}">
+                <button type="button" class="btn btn-success btn-sm" id="btn-create-especialidad">
+                    <i class="fa-solid fa-plus"></i>
+                    Crear nueva especialidad
+                </button>
+                <!-- <a class="btn btn-success btn-sm" href="{{ route('especialidades.create') }}">
                     <i class="fa fa-plus"></i> Agregar nueva especialidad
-                </a>
+                </a> -->
             @endcan
         </div>
 
@@ -70,4 +69,23 @@
         {!! $especialidades->links() !!}
     </div>
 </div>
+
+<div class="modal fade" id="modal-create-especialidad" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="modal-create-especialidad-content">
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('btn-create-especialidad').addEventListener('click', function () {
+    fetch("{{ route('especialidades.create') }}")
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('modal-create-especialidad-content').innerHTML = html;
+            new bootstrap.Modal(document.getElementById('modal-create-especialidad')).show();
+        });
+});
+</script>
+
 @endsection
