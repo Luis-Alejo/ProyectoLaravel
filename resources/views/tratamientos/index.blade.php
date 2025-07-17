@@ -10,10 +10,10 @@
         @endsession
 
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            @can('crear especialidades')
-                <button type="button" class="btn btn-success btn-sm" id="btn-create-especialidad">
+            @can('crear tratamientos')
+                <button type="button" class="btn btn-success btn-sm" id="btn-create-tratamiento">
                     <i class="fa-solid fa-plus"></i>
-                    Crear nueva especialidad
+                    Crear nuevo tratamiento
                 </button>
             @endcan
         </div>
@@ -23,25 +23,29 @@
                 <tr>
                     <th width="80px">No</th>
                     <th>Descripción</th>
+                    <th>Costo Total</th>
+                    <th>Paciente</th>
                     <th width="250px">Acciones</th>
                 </tr>
             </thead>
 
             <tbody>
-            @forelse ($especialidades as $esp)
+            @forelse ($tratamientos as $trat)
                 <tr>
-                    <td>{{ ++$i }}</td>
-                    <td>{{ $esp->descripcion }}</td>
+                    <td>{{ ++$loop->index }}</td>
+                    <td>{{ $trat->descripcion }}</td>
+                    <td>{{ $trat->costo_total }}</td>
+                    <td>{{ $trat->paciente->nombre }} {{ $trat->paciente->apellidos }}</td>
                     <td>
-                        <form action="{{ route('especialidades.destroy',$esp->id) }}" method="POST">
+                        <form action="{{ route('tratamientos.destroy',$trat->id) }}" method="POST">
                             <a 
                                 class="btn btn-info btn-sm"
-                                href="{{ route('especialidades.show',$esp->id) }}">
+                                href="{{ route('tratamientos.show',$trat->id) }}">
                                 <i class="fa-solid fa-list"> </i> Ver
                             </a>
                             <a 
                                 class="btn btn-primary btn-sm"
-                                href="{{ route('especialidades.edit',$esp->id) }}">
+                                href="{{ route('tratamientos.edit',$trat->id) }}">
                                 <i class="fa-solid fa-pen-to-square"></i> Editar
                             </a>
 
@@ -63,24 +67,23 @@
 
         </table>
 
-        {!! $especialidades->links() !!}
     </div>
 </div>
 
-<div class="modal fade" id="modal-create-especialidad" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modal-create-tratamiento" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content" id="modal-create-especialidad-content">
+    <div class="modal-content" id="modal-create-tratamiento-content">
     </div>
   </div>
 </div>
 
 <script>
-document.getElementById('btn-create-especialidad').addEventListener('click', function () {
-    fetch("{{ route('especialidades.create') }}")
+document.getElementById('btn-create-tratamiento').addEventListener('click', function () {
+    fetch("{{ route('tratamientos.create') }}")
         .then(response => response.text())
         .then(html => {
-            document.getElementById('modal-create-especialidad-content').innerHTML = html;
-            new bootstrap.Modal(document.getElementById('modal-create-especialidad')).show();
+            document.getElementById('modal-create-tratamiento-content').innerHTML = html;
+            new bootstrap.Modal(document.getElementById('modal-create-tratamiento')).show();
         });
 });
 </script>

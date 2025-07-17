@@ -41,7 +41,7 @@
                 </a>
             </li>
             <li class="list-group-item bg-light border-0 mb-3 fs-5 px-4 py-3">
-                <a href="#" class="d-flex align-items-center text-dark fw-medium gap-3 text-decoration-none list-group-item-action">
+                <a href="{{ 'pacientes' }}" class="d-flex align-items-center text-dark fw-medium gap-3 text-decoration-none list-group-item-action">
                     <i class="fa-solid fa-user-injured text-success fs-4"></i> Pacientes
                 </a>
             </li>
@@ -51,8 +51,8 @@
                 </a>
             </li>
             <li class="list-group-item bg-light border-0 mb-3 fs-5 px-4 py-3">
-                <a href="#" class="d-flex align-items-center text-dark fw-medium gap-3 text-decoration-none list-group-item-action">
-                    <i class="fa-solid fa-user-md text-success fs-4"></i> Médicos
+                <a href="{{ 'tratamientos' }}" class="d-flex align-items-center text-dark fw-medium gap-3 text-decoration-none list-group-item-action">
+                    <i class="fa-solid fa-user-md text-success fs-4"></i> Tratamientos
                 </a>
             </li>
             <li class="list-group-item bg-light border-0 mb-3 fs-5 px-4 py-3">
