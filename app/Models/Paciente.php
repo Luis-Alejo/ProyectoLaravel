@@ -13,4 +13,9 @@ class Paciente extends Model
         'nombre',
         'apellidos',
     ];
+
+    public function tratamientos()
+    {
+        return $this->hasMany(Tratamiento::class);
+    }
 }

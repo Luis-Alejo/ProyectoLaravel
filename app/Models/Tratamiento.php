@@ -13,10 +13,17 @@ class Tratamiento extends Model
         'descripcion',
         'costo_total',
         'paciente_id',
+        'estado',
+        'monto_pagado'
     ];
 
     public function paciente()
     {
         return $this->belongsTo(Paciente::class);
+    }
+
+    public function detallePagos()
+    {
+        return $this->hasMany(DetallePago::class);
     }
 }

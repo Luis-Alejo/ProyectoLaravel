@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('tratamientos', function (Blueprint $table) {
             $table->id();
             $table->text('descripcion');
-            $table->integer('costo_total');
+            $table->double('costo_total');
+            $table->string('estado');
+            $table->double('monto_pagado');
             $table->foreignId('paciente_id')->constrained('pacientes')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

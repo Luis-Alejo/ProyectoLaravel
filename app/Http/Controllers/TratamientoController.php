@@ -38,26 +38,29 @@ class TratamientoController extends Controller
             'paciente_id' => 'required|exists:pacientes,id',
         ]);
 
-        Tratamiento::create($request->all());
+        $data = $request->all();
+        $data['estado'] = 'No pagado';
+        $data['monto_pagado'] = 0;
+
+        Tratamiento::create($data);
         return redirect()->route('tratamientos.index')->with('success', 'Tratameitnto creado correctamente.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Tratamiento $tratamientos): View
+    public function show(Tratamiento $tratamiento): View
     {
-        $paciente = $tratamientos->paciente;
-        return view('tratamientos.show', compact('tratamientos', 'paciente'));
+        return view('tratamientos.show', compact('tratamiento'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tratamiento $tratamientos): View
+    public function edit(Tratamiento $tratamiento): View
     {
         $pacientes = Paciente::all();
-        return view('tratamientos.edit', compact('tratamientos', 'pacientes'));
+        return view('tratamientos.edit', compact('tratamiento', 'pacientes'));
     }
 
     /**

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('monto');
             $table->string('metodo_pago');
-            $table->foreignId('pago_id')->constrained('pagos')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('tratamiento_id')->constrained('tratamientos')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

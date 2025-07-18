@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetallePago;
+use App\Models\Tratamiento;
 use Illuminate\Http\Request;
 
 class DetallePagoController extends Controller
@@ -18,9 +19,10 @@ class DetallePagoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($tratamiento_id)
     {
-        //
+        $tratamiento = Tratamiento::findOrFail($tratamiento_id);
+        return view('pagos.create', compact('tratamiento_id'));
     }
 
     /**
@@ -28,7 +30,22 @@ class DetallePagoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'tratamiento_id' => 'required|exists:tratamientos,id',
+            'monto' => 'required|numeric|min:0',
+            'metodo_pago' => 'required|string|max:50',
+        ]);
+
+        DetallePago::create($request->all());
+        $tratamiento = Tratamiento::findOrFail($request->tratamiento_id);
+        $tratamiento->monto_pagado += $request->monto;
+        if ($tratamiento->monto_pagado >= $tratamiento->costo_total) {
+            $tratamiento->estado = 'Pagado';
+        } else {
+            $tratamiento->estado = 'Parcial';
+        }
+        $tratamiento->save();
+        return redirect()->route('tratamientos.index')->with('success', 'Pago agregado correctamente.');
     }
 
     /**

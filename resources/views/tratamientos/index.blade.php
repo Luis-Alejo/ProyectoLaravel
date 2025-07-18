@@ -23,8 +23,10 @@
                 <tr>
                     <th width="80px">No</th>
                     <th>Descripción</th>
-                    <th>Costo Total</th>
                     <th>Paciente</th>
+                    <th>Estado</th>
+                    <th>Monto Pagado</th>
+                    <th>Costo Total</th>
                     <th width="250px">Acciones</th>
                 </tr>
             </thead>
@@ -34,15 +36,25 @@
                 <tr>
                     <td>{{ ++$loop->index }}</td>
                     <td>{{ $trat->descripcion }}</td>
-                    <td>{{ $trat->costo_total }}</td>
                     <td>{{ $trat->paciente->nombre }} {{ $trat->paciente->apellidos }}</td>
+                    <td @class([
+                        'text-danger' => ($trat->estado == 'No pagado'),
+                        'text-warning' => ($trat->estado == 'Parcial'),
+                        'text-success' => ($trat->estado == 'Pagado')
+                        ])>{{ $trat->estado }}</td>
+                    <td @class([
+                        'text-danger' => ($trat->estado == 'No pagado'),
+                        'text-warning' => ($trat->estado == 'Parcial'),
+                        'text-success' => ($trat->estado == 'Pagado')
+                        ])>{{ $trat->monto_pagado }} Bs.</td>
+                    <td>{{ $trat->costo_total }} Bs.</td>
                     <td>
                         <form action="{{ route('tratamientos.destroy',$trat->id) }}" method="POST">
                             <a 
                                 class="btn btn-info btn-sm"
                                 href="{{ route('tratamientos.show',$trat->id) }}">
                                 <i class="fa-solid fa-list"> </i> Ver
-                            </a>
+                            </a> 
                             <a 
                                 class="btn btn-primary btn-sm"
                                 href="{{ route('tratamientos.edit',$trat->id) }}">
@@ -70,21 +82,58 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-create-tratamiento" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content" id="modal-create-tratamiento-content">
+<div class="modal fade" id="modal-tratamiento" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" id="modal-tratamiento-content">
     </div>
   </div>
 </div>
 
+
+<div class="modal fade" id="modal-pago" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="modal-pago-content">
+    </div>
+  </div>
+</div>
+
+
 <script>
-document.getElementById('btn-create-tratamiento').addEventListener('click', function () {
-    fetch("{{ route('tratamientos.create') }}")
+function openModalPaciente(url) {
+    fetch(url)
         .then(response => response.text())
         .then(html => {
-            document.getElementById('modal-create-tratamiento-content').innerHTML = html;
-            new bootstrap.Modal(document.getElementById('modal-create-tratamiento')).show();
+            document.getElementById('modal-tratamiento-content').innerHTML = html;
+            new bootstrap.Modal(document.getElementById('modal-tratamiento')).show();
+    });
+}
+document.addEventListener('DOMContentLoaded', function () {
+    const btnCreate = document.getElementById('btn-create-tratamiento');
+    if (btnCreate) {
+        btnCreate.addEventListener('click', function () {
+            openModalPaciente("{{ route('tratamientos.create') }}");
         });
+    }
+    document.querySelectorAll('a.btn-info, a.btn-primary').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            openModalPaciente(this.getAttribute('href'));
+        });
+    });
+    document.body.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'btn-create-pago') {
+            const tratamientoId = e.target.getAttribute('data-id');
+            const url = "{{ route('pagos.create', ':id') }}".replace(':id', tratamientoId);
+            console.log('URL:' + url);
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('modal-pago-content').innerHTML = html;
+                    new bootstrap.Modal(document.getElementById('modal-pago')).show();
+                })
+                .catch(error => console.error('Error fetching create pago form:', error));
+        }
+    });
 });
 </script>
 
